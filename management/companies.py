@@ -1,4 +1,5 @@
-from unicodedata import name
+
+from re import M
 import pandas as pd
 import requests
 import json
@@ -19,6 +20,20 @@ try:
 except:
     exit()
 
+month_num = {
+    '01':'January',
+    '02':'February',
+    '03':'March',
+    '04':'April',
+    '05':'May',
+    '06':"June",
+    '07':'July',
+    '08':'August',
+    '09':'September',
+    '10':'October',
+    '11':'November',
+    '12':'December'
+}
 
 for index,record in cik_df.iterrows():
     
@@ -56,7 +71,17 @@ for index,record in cik_df.iterrows():
     zipCode = addr.get('zipCode') if addr.get('zipCode')!=None else " "
     address = street +", "+ city+", "+ state + ", "+ zipCode
     new_company.mailing_addr = address
-    new_company.category = data.get("category") if addr.get('category')!=None else " "
+    new_company.category = data.get("category") if data.get('category')!=None else " "
+    if data.get('fiscalYearEnd') == None:
+        new_company.fiscal_year_end = ""
+    else:
+        year_end = data.get('fiscalYearEnd')
+        try:
+            year_end = year_end[-2:] + ", " + month_num[year_end[:2]]
+        except:
+            year_end = ""
+        new_company.fiscal_year_end = year_end
+    print(year_end)
     try:
         db.add(new_company)
         db.commit()    
