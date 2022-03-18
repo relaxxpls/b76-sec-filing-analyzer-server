@@ -14,6 +14,7 @@ class Company(Base):
     ticker = Column(String) # multiple ticker separated by ,
     mailing_addr = Column(String)
     category = Column(String)
+    fiscal_year_end = Column(String)
 
     def as_dict(self):
        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
