@@ -10,7 +10,7 @@
 ```
 python3 -m venv .env
 ```
-- Install dependencies using the command 
+- Install Python dependencies using the command 
 ```
 pip install requirements.txt
 ```
