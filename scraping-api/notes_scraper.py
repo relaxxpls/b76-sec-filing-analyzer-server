@@ -1,11 +1,9 @@
 from datetime import datetime
-from fileinput import filename
 import pandas
 import requests
 import json
 from bs4 import BeautifulSoup
 import os
-import random
 import re
 from nltk.tokenize import sent_tokenize
 from tqdm import tqdm
@@ -37,10 +35,14 @@ def string_has_notes(string):
 
 BASE_URL_CIK = 'https://data.sec.gov/submissions/'
 BASE_URL_FORM = 'https://www.sec.gov/Archives/edgar/data/'
+DATA_FOLDER = 'data'
+RESULT_DIR = 'result'
+OPEN_IE_DIR = 'Open-IE'
+FILING_DIR = 'json'
 
-companies_list = pandas.read_csv('data/saas_list.csv', usecols=['Company'])['Company'].to_list()
+companies_list = pandas.read_csv('{}/saas_list.csv'.format(DATA_FOLDER), usecols=['Company'])['Company'].to_list()
 
-cik_df = pandas.read_csv('result/res.csv', usecols=['name','cik'])
+cik_df = pandas.read_csv('{}/res.csv'.format(RESULT_DIR), usecols=['name','cik'])
 
 for company in tqdm(companies_list):
     try:
@@ -52,7 +54,7 @@ for company in tqdm(companies_list):
         cik = '0'*(10-len(cik)) + cik
         
         url = BASE_URL_CIK + 'CIK' + cik + '.json'
-        res = requests.get(url, headers={'user-agent':"interIIT krishna@interIIT.com",'Accept-Encoding':'gzip, deflate, br'})
+        res = requests.get(url, headers={'user-agent':"xxxx@yyyy.com",'Accept-Encoding':'gzip, deflate, br'})
         data = json.loads(res.text)
         
         recent_filings = data["filings"]['recent']
@@ -72,7 +74,7 @@ for company in tqdm(companies_list):
         for j in scraped_indices:
             if form_type[j] != '10-K': continue
             url =  BASE_URL_FORM + cik + '/'+ accession_no[j] + '.txt'
-            req = requests.get(url, headers={'user-agent':"interIIT krishna@interIIT.com",'Accept-Encoding':'gzip, deflate, br'})
+            req = requests.get(url, headers={'user-agent':"xxxx@yyyy.com",'Accept-Encoding':'gzip, deflate, br'})
             file_content = req.text
             sub_str1 = file_content.find('<XBRL>')
             sub_str2 = file_content.find('</XBRL>')
@@ -107,7 +109,7 @@ for company in tqdm(companies_list):
                         except: break
 
                     if len(text) < 10:
-                        file_name = "json/"+company +'/'+ form_type[j]+"_"+accepted_on[j][0:10]+".json"
+                        file_name = "{}/".format(FILING_DIR)+company +'/'+ form_type[j]+"_"+accepted_on[j][0:10]+".json"
                         with open(file_name, 'r', encoding='utf-8') as file:
                             content = json.load(file)
                         use_key = None
@@ -120,10 +122,10 @@ for company in tqdm(companies_list):
                         text = soup_aux.text
                         with open('test_2.txt', 'w') as file: file.write(text)
                     try:
-                        os.makedirs("Open-IE/"+company)
+                        os.makedirs("{}/".format(OPEN_IE_DIR)+company)
                     except:
                         pass
-                    file_name = "Open-IE/"+company +'/'+ form_type[j]+"_"+accepted_on[j][0:10]+".txt"
+                    file_name = "{}/".format(OPEN_IE_DIR)+company +'/'+ form_type[j]+"_"+accepted_on[j][0:10]+".txt"
                     with open(file_name, 'w') as file:
                         file.write(text)
 
