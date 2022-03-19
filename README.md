@@ -4,6 +4,7 @@
 - Python3.8
 - MongoDB v5.0.2
 - Sec API (<a href="https://pypi.org/project/sec-api/">sec-api</a>)
+- YFinance (<a href="https://pypi.org/project/yfinance/">yfinance</a>)
 
 ## Installation and setup
 - Clone the repository
