@@ -14,11 +14,15 @@ python3 -m venv .env
 ```
 pip install requirements.txt
 ```
+- Load the data into the database using the command
+```
+python3 loaddb.py <path_to_data_directory>
+```
 - Run the command
 ```
 uvicorn main:app --reload
 ```
-- Load the data into the database using the command
-```
-python3 loaddata.py <path_to_data_directory>
-```
+- The server will start running on **http://127.0.0.1:8000**
+
+
+
