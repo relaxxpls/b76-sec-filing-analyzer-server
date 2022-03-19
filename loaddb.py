@@ -21,6 +21,7 @@ with open(os.path.join(data_dir,'cik_name_mapping.csv')) as f:
             try:
                 data_dict = json.loads(open(cik_file_path).read())
                 data_dict['Filings'] = json.loads(open(name_file_path).read())['filings']
+                data_dict['Name'] = row[1]
             except:
                 continue
             db['company_data'].insert_one({'cik' : row[2], 'data' : data_dict})
