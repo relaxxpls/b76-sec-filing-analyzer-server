@@ -23,7 +23,7 @@ from spacy.language import Language
 
 
 
-source_file_path = ''   #source of txt file containing scraped data of companies
+source_file_path = ''   #source of txt file containing scraped data of companies - the output path of @see{scraping-api/notes_extractor}
 final_path = ''         #path to save the final question answers
 pkl_path=''
 nlp_web_sm = spacy.load("en_core_web_sm")
