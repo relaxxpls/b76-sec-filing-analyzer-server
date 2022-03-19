@@ -1,16 +1,14 @@
+import json
+import config
 from fastapi import FastAPI
-import models
-from models import Company
-from database import SessionLocal, engine
-from sqlalchemy.orm import Session
+from pymongo import MongoClient
 
-models.Base.metadata.create_all(bind=engine)
+client = MongoClient()
+
+db = client[config.DBNAME]
 
 app = FastAPI()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@app.get('/api/company/{cik}')
+async def getCompanyData(cik):
+    return db['company_data'].find_one({'cik' : cik})
